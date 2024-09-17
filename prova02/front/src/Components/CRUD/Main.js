@@ -1,36 +1,52 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import EditarAluno from "./aluno/EditarAluno";
-import CriarAluno from "./aluno/CriarAluno";
-import ListarAluno from "./aluno/ListarAluno";
 
+import CriarAluno from "../CRUD/Aluno/CriarAluno"
+import EditarAluno from "../CRUD/Aluno/EditarAluno"
+import ListarAluno from "../CRUD/Aluno/ListarAluno"
+
+import Navbar from "./Navbar";
 import Home from "./Home";
 
-const router = createBrowserRouter(
+import Firebase from "./Utils/Firebase";
+import FirebaseContext from "./Utils/FirebaseContext";
+import ListarAlunosPorCurso from "../CRUD/Aluno/ListarAlunosPorCurso";
+
+const Router = createBrowserRouter(
     [
         {
-            path:"/",
-            element: <Home/>,
-            children:[
+            path: "/",
+            element: <Navbar />,
+            children: [
                 {
-                    path:"aluno/listar",
-                    element:<ListarAluno/>
+                    path: "/aluno/criar",
+                    element: <CriarAluno />
                 },
                 {
-                    path:"aluno/criar",
-                    element:<CriarAluno/>
+                    path: "/aluno/editar/:id",
+                    element: <EditarAluno />
                 },
                 {
-                    path:"aluno/editar/:id",
-                    element:<EditarAluno/>
+                    path: "/aluno/listar",
+                    element: <ListarAluno />
+                },
+                {
+                    path: "/",
+                    element: <Home />
+                },
+                {
+                    path: "/aluno/listarAlunosPorCurso",
+                    element: <ListarAlunosPorCurso />
                 }
             ]
-        },
+        }
     ]
 )
 
 const Main = () => {
     return (
-        <RouterProvider router={router}/>
+        <FirebaseContext.Provider value={new Firebase()}>
+            <RouterProvider router={Router} />
+        </FirebaseContext.Provider>
     )
 }
 
